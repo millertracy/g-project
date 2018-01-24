@@ -31,7 +31,7 @@ def create_db_tables():
     """
 
     create_user_table = """
-    CREATE TABLE pc_user (
+    CREATE TABLE dep_user (
         users varchar(80) PRIMARY KEY,
         member_since varchar(20)
         );
@@ -39,11 +39,12 @@ def create_db_tables():
         """
 
     create_post_table = """
-    CREATE TABLE pc_post (
+    CREATE TABLE dep_post (
         pid   varchar(20) primary key,
         users varchar(80),
         posts text,
-        post_type varchar(10)
+        post_type varchar(10),
+        title text
         );"""
 
 
@@ -120,20 +121,19 @@ def parse_thread_page(soup):
 
 def add_to_db(thd):
     """
-    Takes in a list of dictionaries (threads on a thread page)
+    Takes in a thread
     Updates 2 tables in sql database
         - pc_user
         - pc_post
     _________________________
     Input:
-        - links: html for a thread
-        - thread: title of the thread
+        - thread: thread hyperlink
 
     Output:
         None
 
     """
-    post_count = 0
+
     #for thd in threads:
         # for each thread, get the thread link and response
         # and turn the text into a soup object
@@ -141,10 +141,12 @@ def add_to_db(thd):
     response = get_request(thd)
     soup = soupify(response)
 
+    #get title of thread
+    title = soup.find("h1", {"class": "post_title"}).text.strip()
+
     #get all of the post tables in a thread
     tables = get_tables(soup)
-    insert_user_post(tables)
-    post_count += len(tables)
+    insert_user_post(tables, title, ptype = "author")
 
     # check if a thread has a navigation panel
     nav_page = soup.find('div', {'class': 'pagenav'})
@@ -158,25 +160,24 @@ def add_to_db(thd):
         # Insert user and post information into the database tables
         while next_page != None:
             href = next_page['href']
-            print(href)
             response = get_request(href)
             soup = soupify(response)
+            title = soup.find("h1", {"class": "post_title"}).text.strip()
             tables = get_tables(soup)
-            insert_user_post(tables)
-            post_count += len(tables)
+            insert_user_post(tables, title)
             next_page = soup.find("a", {"rel": "next"})
 
     # once the entire thread has been parsed and data uploaded, sleep for a random time (2-5 s) and
     # repeat for the next thread
-    time.sleep(np.random.randint(2,6))
+    time.sleep(np.random.uniform(2,6))
 #print post_count
 
-def insert_user_post(tables):
+def insert_user_post(tables, title, ptype = "responder"):
     """
-    Takes in a list of html elements
+    Takes in a list of html elements and thread title
     Updates the sql user table (pc_user) and sql post table (pc_post)
     Returns None
-    ____________________
+    ________________________________________
     pc_user
         users: list of usernames
         member_since: list dates became a member for each user
@@ -209,7 +210,6 @@ def insert_user_post(tables):
         else:
             user = table.find("a", {"class": "bigusername"}).text
 
-
         #grab post and strip out characters that can't be encoded into unicode
         post = table.find_all("div", {"id": re.compile("post_message_\d+")})[0].text.strip()
         post = "".join([letter for letter in post if letter in printable])
@@ -217,20 +217,17 @@ def insert_user_post(tables):
             post = re.sub(r'http\S+', '', post)
             post = "".join([letter for letter in post if letter in printable])
 
-        # add post is from author or responder
-        if i == 0:
-            post_type = 'author'
-        else:
-            post_type = 'responder'
+        # add post as author or responder
+        post_type = ptype
 
 
         #input information into pc_post table
         #commit to the database
         query_insert = ("""
-        INSERT INTO pc_post (pid, users, posts, post_type)
-        VALUES (%s, %s, %s, %s);
+        INSERT INTO dep_post (pid, users, posts, post_type, title)
+        VALUES (%s, %s, %s, %s, %s);
         """,
-        (pid, user,  post, post_type))
+        (pid, user,  post, post_type, title))
 
         cur.execute(query_insert[0], query_insert[1])
         conn2.commit()
@@ -238,7 +235,7 @@ def insert_user_post(tables):
         #check if user is in pc_user table
         query_user = ("""
         SELECT users
-        FROM   pc_user
+        FROM   dep_user
         WHERE  users = %s;
         """,(user,))
 
@@ -266,9 +263,8 @@ def insert_user_post(tables):
         else:
             member_since = table.findAll('br')[n].findNext('div').text.split(":")[-1].strip()
 
-        print(member_since)
         query_insert = ("""
-        INSERT INTO pc_user (users, member_since)
+        INSERT INTO dep_user (users, member_since)
         VALUES (%s, %s);
         """,
         (user, member_since))
