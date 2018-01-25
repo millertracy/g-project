@@ -31,7 +31,7 @@ def create_db_tables():
     """
 
     create_user_table = """
-    CREATE TABLE dep_user (
+    CREATE TABLE pc_anx_user (
         users varchar(80) PRIMARY KEY,
         member_since varchar(20)
         );
@@ -39,12 +39,14 @@ def create_db_tables():
         """
 
     create_post_table = """
-    CREATE TABLE dep_post (
+    CREATE TABLE pc_anx_post (
         pid   varchar(20) primary key,
         users varchar(80),
+        mood varchar(30),
         posts text,
         post_type varchar(10),
-        title text
+        title text,
+        forum_name text
         );"""
 
 
@@ -210,24 +212,40 @@ def insert_user_post(tables, title, ptype = "responder"):
         else:
             user = table.find("a", {"class": "bigusername"}).text
 
+        #get mood
+        if table.find('img', {'src': re.compile("^/images/mood")}):
+            mood = tables[1].find('img', {'src': re.compile("^/images/mood")})['src'].split("/")[-1].split(".")[0].lower()
+        else:
+            mood = 'nan'
+
         #grab post and strip out characters that can't be encoded into unicode
-        post = table.find_all("div", {"id": re.compile("post_message_\d+")})[0].text.strip()
-        post = "".join([letter for letter in post if letter in printable])
+        if table.find("div", {"id": re.compile("post_message_\d+")}).find("table"):
+            table.find("div", {"id": re.compile("post_message_\d+")}).find("div", {"class": "smallfont"}).extract()
+            table.find("div", {"id": re.compile("post_message_\d+")}).find("table").extract()
+            post = table.find(("div", {"id": re.compile("post_message_\d+")})).text.strip()
+            post = "".join([letter for letter in post if letter in printable])
+        else:
+            post = table.find_all("div", {"id": re.compile("post_message_\d+")})[0].text.strip()
+            post = "".join([letter for letter in post if letter in printable])
         if "http" in post:
             post = re.sub(r'http\S+', '', post)
-            post = "".join([letter for letter in post if letter in printable])
+
 
         # add post as author or responder
         post_type = ptype
+
+        #add a forum name
+        fname = ''
+
 
 
         #input information into pc_post table
         #commit to the database
         query_insert = ("""
-        INSERT INTO dep_post (pid, users, posts, post_type, title)
-        VALUES (%s, %s, %s, %s, %s);
+        INSERT INTO dep_post (pid, users, mood, posts, post_type, title, forum_name)
+        VALUES (%s, %s, %s, %s, %s, %s, %s);
         """,
-        (pid, user,  post, post_type, title))
+        (pid, user, mood, post, post_type, title, fname))
 
         cur.execute(query_insert[0], query_insert[1])
         conn2.commit()
