@@ -76,6 +76,9 @@ def parse_forum(html):
     p = Pool()
     p.map(add_to_db,threads)
 
+    #count pages
+    page = 0
+    print("page:", page)
     #see if a navigation bar exists
     nav_page = soup.find('div', {'class': 'pagenav'})
         # if a next button exists, get the link for the next thread page
@@ -89,6 +92,8 @@ def parse_forum(html):
             response = get_request(href)
             soup = soupify(response)
             threads = parse_thread_page(soup)
+            page += 1
+            print("page:", page)
             p = Pool()
             p.map(add_to_db,threads)
             next_page = soup.find("a", {"rel": "next"})
@@ -214,7 +219,7 @@ def insert_user_post(tables, title, ptype = "responder"):
 
         #get mood
         if table.find('img', {'src': re.compile("^/images/mood")}):
-            mood = tables[1].find('img', {'src': re.compile("^/images/mood")})['src'].split("/")[-1].split(".")[0].lower()
+            mood = table.find('img', {'src': re.compile("^/images/mood")})['src'].split("/")[-1].split(".")[0].lower()
         else:
             mood = 'nan'
 
@@ -235,14 +240,14 @@ def insert_user_post(tables, title, ptype = "responder"):
         post_type = ptype
 
         #add a forum name
-        fname = ''
+        fname = 'Anxiety Success Stories'
 
 
 
         #input information into pc_post table
         #commit to the database
         query_insert = ("""
-        INSERT INTO dep_post (pid, users, mood, posts, post_type, title, forum_name)
+        INSERT INTO pc_anx_post (pid, users, mood, posts, post_type, title, forum_name)
         VALUES (%s, %s, %s, %s, %s, %s, %s);
         """,
         (pid, user, mood, post, post_type, title, fname))
@@ -253,7 +258,7 @@ def insert_user_post(tables, title, ptype = "responder"):
         #check if user is in pc_user table
         query_user = ("""
         SELECT users
-        FROM   dep_user
+        FROM   pc_anx_user
         WHERE  users = %s;
         """,(user,))
 
@@ -282,7 +287,7 @@ def insert_user_post(tables, title, ptype = "responder"):
             member_since = table.findAll('br')[n].findNext('div').text.split(":")[-1].strip()
 
         query_insert = ("""
-        INSERT INTO dep_user (users, member_since)
+        INSERT INTO pc_anx_user (users, member_since)
         VALUES (%s, %s);
         """,
         (user, member_since))

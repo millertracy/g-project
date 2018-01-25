@@ -70,7 +70,7 @@ def forum_scrape(html):
     if soup.find("a", rel="next") != None:
         next_page = soup.find("a", rel="next")
 
-    page = 35
+    page = 1
     print("page:", page)
     while next_page:
         href = next_page['href']
@@ -166,7 +166,7 @@ def insert_post(soup, title):
     """
 
     # forum name
-    fname = "Social Anxiety"
+    fname = "Specific Phobias"
 
     # grab all post tables
     tables = soup.findAll("div", {'class':"postdetails", 'id' : False})
