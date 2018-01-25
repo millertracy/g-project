@@ -70,7 +70,7 @@ def forum_scrape(html):
     if soup.find("a", rel="next") != None:
         next_page = soup.find("a", rel="next")
 
-    page = 248
+    page = 35
     print("page:", page)
     while next_page:
         href = next_page['href']
@@ -97,6 +97,9 @@ def parse_thread_page(soup):
 
     #create list to store thread titles and links
     links = []
+
+    #capture forum name
+    #forum = soup.find("span", {"class": "forumtitle"}).text.split("Forum")[0]
 
     # capture thread list
     thread_list = soup.find("ol", {"class": "threads"}).findAll("li", {"id": re.compile("thread_\d+") })
@@ -161,6 +164,9 @@ def insert_post(soup, title):
     Input: Soup object
     Output: pandas df
     """
+
+    # forum name
+    fname = "Social Anxiety"
 
     # grab all post tables
     tables = soup.findAll("div", {'class':"postdetails", 'id' : False})
@@ -233,17 +239,16 @@ def insert_post(soup, title):
         cur.execute(query_pid[0], query_pid[1])
         tbl_pid = cur.fetchone()
         if tbl_pid:
-            print("c")
             continue
 
 
         #input information into pc_post table
         #commit to the database
         query_insert = ("""
-        INSERT INTO mh_anx_post (pid, users, posts, mood, post_title, post_type, title)
-        VALUES (%s, %s, %s, %s, %s, %s, %s);
+        INSERT INTO mh_anx_post (pid, users, posts, mood, post_title, post_type, title, forum_name)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
         """,
-        (pid, user,  post, mood, post_title, post_type, title))
+        (pid, user,  post, mood, post_title, post_type, title, fname))
 
         cur.execute(query_insert[0], query_insert[1])
         conn.commit()
