@@ -234,8 +234,20 @@ def top_n_others(vect, ri, n, users):
     sim_users = list(doc[top_n])
     return user, [users[sim] for sim in sim_users]
 
+def top_n_posts(vect, ri, n, users, posts):
 
-def print_user_sims_posts(pint, sims):
+    cos_sim = linear_kernel(vect, vect)
+    sim_sort = np.argsort(cos_sim, axis = 1)
+    sim_sort = sim_sort[:, 0:-1]
+    top_n = list(range(-1,-n-1,-1))
+    doc = sim_sort[ri, :]
+    user = users[ri]
+    sim_users = list(doc[top_n])
+    return (user, posts[ri]), [(users[sim], posts[sim]) for sim in sim_users]
+
+
+
+def print_user_sims_posts(ri, users, posts):
     """
     Takes output of top_n_others and prints the user post and most similar users and their posts
 
