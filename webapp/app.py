@@ -23,13 +23,14 @@ vect = joblib.load("../vect.pkl")
 #get query
 query = ['i have a lot of anxiety, especially at night']
 
+
 @app.route('/')
 def get_sim_users():
     query_vect = vectorizer.transform(query)
     cos_sim = linear_kernel(vect, query_vect)
     top_sims = np.argsort(cos_sim, axis = None)[-1:-4:-1]
     top_posts = [docs[sim] for sim in top_sims]
-    return render_template('demo.html', top_posts = top_posts)
+    return render_template('index.html', top_posts = top_posts)
 
 if __name__ == "__main__":
     app.run()
