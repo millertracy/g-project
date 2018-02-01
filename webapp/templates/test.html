@@ -1,0 +1,40 @@
+<head>
+  <script src="static/js/jquery-3.3.1.min.js"></script>
+    <script>
+      submit = function(){
+        message = $("#message").val()
+
+        $.post({
+          url: "/solve",
+		      contentType: "application/json",
+		      data: JSON.stringify(message),
+          success: function(result){$(".hidden").css("display", "inline").html(result[0] + result[1] + result[2]);
+      }
+    });
+  }
+
+    </script>
+    <style>
+      .hidden{
+        display: none;
+      }
+      </style>
+
+    </head>
+
+    <body>
+    <div class="wrap-input100 validate-input" data-validate = "Message is required">
+      <span class="label-input100">Message</span>
+      <input class="input100" name="message" placeholder="Your message here..." id="message">
+    </div>
+
+    <div class="container-contact100-form-btn">
+      <div class="wrap-contact100-form-btn">
+        <div class="contact100-form-bgbtn"></div>
+        <button class="contact100-form-btn" onclick="submit();">
+          Submit
+        </button>
+        <p><span class = "hidden"></span></p>
+      </div>
+    </div>
+  </body>
