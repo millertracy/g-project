@@ -12,9 +12,9 @@ plt.style.use("ggplot")
 
 #for cleaning documents
 punc = string.punctuation
-alt_punc = "".join([char for char in string.punctuation if char not in ['?', '.' ]])
-contract = ['arent', 'wasnt', 'shouldnt', 'isnt', 'cant', 'hadnt', 'wouldnt', 'havent'
-            'didnt', 'doesnt', 'dont', 'hasnt', 'couldnt']
+alt_punc = "".join([char for char in string.punctuation if char not in ['?', '.', '-' ]])
+contract = ['arent', 'wasnt', 'shouldnt', 'isnt', 'cant', 'hadnt', 'wouldnt', 'havent',
+            'didnt', 'doesnt', 'dont', 'hasnt', 'couldnt', 'never']
 
 # connect to db and create cursor object
 conn = psycopg2.connect('dbname = mh')
@@ -31,15 +31,17 @@ def close_conn():
 def doc_remove_punc(doc):
     inter = set(contract) & set(doc.split())
     if inter:
-        doc.replace(inter+' ', inter+'-')
-    doc =  [letter for letter in doc if letter not in punc]
+        for w in inter:
+            doc = doc.replace(w+' ', w+'-')
+    return  [letter for letter in doc if letter not in punc]
 
 
 def doc_keep_punc(doc):
     inter = set(contract) & set(doc.split())
     if inter:
-        doc.replace(inter+' ', inter+'-')
-    update = [letter for letter in doc if letter not in alt_punc]
+        for w in inter:
+            doc = doc.replace(w+' ', w+'-')
+    return [letter for letter in doc if letter not in alt_punc]
 
 
 
