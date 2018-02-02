@@ -29,19 +29,21 @@ def close_conn():
 
 
 def doc_remove_punc(doc):
+    doc = "".join([letter for letter in doc if letter not in punc])
     inter = set(contract) & set(doc.split())
     if inter:
         for w in inter:
             doc = doc.replace(w+' ', w+'-')
-    return  [letter for letter in doc if letter not in punc]
+    return doc
 
 
 def doc_keep_punc(doc):
+    doc = "".join([letter for letter in doc if letter not in alt_punc])
     inter = set(contract) & set(doc.split())
     if inter:
         for w in inter:
             doc = doc.replace(w+' ', w+'-')
-    return [letter for letter in doc if letter not in alt_punc]
+    return doc
 
 
 
