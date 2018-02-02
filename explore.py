@@ -12,6 +12,9 @@ plt.style.use("ggplot")
 
 #for cleaning documents
 punc = string.punctuation
+alt_punc = "".join([char for char in string.punctuation if char not in ['?', '.' ]])
+contract = ['arent', 'wasnt', 'shouldnt', 'isnt', 'cant', 'hadnt', 'wouldnt', 'havent'
+            'didnt', 'doesnt', 'dont', 'hasnt', 'couldnt']
 
 # connect to db and create cursor object
 conn = psycopg2.connect('dbname = mh')
@@ -25,7 +28,22 @@ def close_conn():
     return None
 
 
-def make_mh_df():
+def doc_remove_punc(doc):
+    inter = set(contract) & set(doc.split())
+    if inter:
+        doc.replace(inter+' ', inter+'-')
+    doc =  [letter for letter in doc if letter not in punc]
+
+
+def doc_keep_punc(doc):
+    inter = set(contract) & set(doc.split())
+    if inter:
+        doc.replace(inter+' ', inter+'-')
+    update = [letter for letter in doc if letter not in alt_punc]
+
+
+
+def make_mh_df(func):
     """
     Query a sql post table and a sql user table from mh forum and convert them into
     dataframes. Create a dictionary with users as keys and posts as values.
@@ -76,7 +94,8 @@ def make_mh_df():
         doc = info[2]
         doc = "".join(re.sub(r'\s\s', '|', doc).split())
         doc = doc.replace("|", " ")
-        doc = [letter for letter in doc if letter not in punc]
+        doc = doc.replace('...', '.')
+        doc = func(doc)
         doc = ("".join(doc).lower())
         md[info[1]].append(doc)
 
@@ -107,7 +126,7 @@ def make_mh_df():
 
 
 
-def make_pc_df(md):
+def make_pc_df(func, md):
     """
     Query a sql post table and a sql user table from pc forum and convert them into
     dataframes. Create a dictionary with users as keys and posts as values.
@@ -150,7 +169,9 @@ def make_pc_df(md):
 
         doc = info[3]
         doc = " ".join([word.strip().lower() for word in doc.split()])
-        doc = "".join([letter for letter in doc if letter not in punc])
+        doc.replace('...', '.')
+        doc = func(doc)
+        doc = "".join(doc)
         md['user'].append(doc) #appending to dictionary of users and docs from above
 
         post.append(doc)
