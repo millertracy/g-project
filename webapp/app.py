@@ -6,13 +6,11 @@ import numpy as np
 app = Flask(__name__)
 
 
-#import dictionary to extract posts
-md = joblib.load("../md.pkl")
+#import dataframe to extract posts
+df_personal = joblib.load("../df_personal.pkl")
 
-#get users and docs
-users = [key for key in md]
-documents = [md[user] for user in users]
-docs = [" ".join(doc) for doc in documents]
+#get docs
+docs = [df_personal['post'][i] for i in df_personal.index]
 
 #import vectorizer
 vectorizer = joblib.load("../vectorizer.pkl")
