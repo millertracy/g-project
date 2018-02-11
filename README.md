@@ -2,7 +2,7 @@
 
 ## A new network for mental health
 
-###Business Understanding
+### Business Understanding
 
 Finding the right combination of treatment and support
 for mental health issues can be a long, expensive, and unfulfilling process.
@@ -14,7 +14,7 @@ This tool utilizes natural language processing to match people with others who
 share a unique manifestation of a disorder and demonstrates the potential of
 this technology to enhance the therapeutic process.
 
-###Data Understanding
+### Data Understanding
 
 I used the only data currently accessible - public mental health forums. There
 are some drawbacks and advantages to using data from this domain. Data on mental forums
@@ -23,7 +23,7 @@ people rather than the person writing, and so had to be filtered out for the
 purposes of this project. However, this provides a nice foundation for capturing
 only patient dialogue if this tool were to be utilized in a therapeutic setting.
 
-###Data Preparation
+### Data Preparation
 
 The scope of this project focused on anxiety as it is the most common disorder
 in the United States, has a high lifetime prevalence, and presents with a lot of variation
@@ -40,7 +40,7 @@ Posts with less than 10 words were also filtered as most of them were either not
 personal or provided very little meaning about a person's experience and symptomology.
 Posts were atomized, filtered for punctuation, and lemmatized before modeling.  
 
-###Modeling
+### Modeling
 
 A Natural Language Processing model was used to match similar posts using
 cosine similarity. My data could be categorized into 3 broad categories:
@@ -65,7 +65,7 @@ Graph Theory was also used to demonstrate how comparing posts within a user
 could be used to enhance therapy, especially therapies centered on identifying
 thought patterns and environmental triggers, like cognitive behavioral therapy.
 
-###Deployment
+### Deployment
 
 This project is ongoing with the eventual goal being implementation. A webapp
 demo was created to visually demonstrate the value of matching users. Further work
