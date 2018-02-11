@@ -11,9 +11,7 @@
 		      contentType: "application/json",
 		      data: JSON.stringify(message),
           success: function(result){$("#u1").html(result[0]),
-                   $("#u2").html(result[1]), $("#u3").html(result[2]),
-                   $("#u4").html(result[3]), $("#u5").html(result[4]),
-                   $("#u6").html(result[5])
+                   $("#u2").html(result[1]), $("#u3").html(result[2])
         }
     });
   }
@@ -37,27 +35,30 @@
 
   <body>
 
-    <!-- Navigation -->
+    <!-- < Navigation > -->
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
         <a class="navbar-brand" href="index.html">What worked for others</a>
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <!-- <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
-        </button>
+        </button> -->
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
               <a class="nav-link" href="about.html">About</a>
             </li>
-            <!-- <li class="nav-item">
+            <li class="nav-item">
               <a class="nav-link" href="services.html">Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="contact.html">Research</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="contact.html">Contact</a>
             </li>
-            <li class="nav-item dropdown">
+            <!-- <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Portfolio
+                Menu
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
                 <a class="dropdown-item" href="portfolio-1-col.html">1 Column Portfolio</a>
@@ -66,8 +67,8 @@
                 <a class="dropdown-item" href="portfolio-4-col.html">4 Column Portfolio</a>
                 <a class="dropdown-item" href="portfolio-item.html">Single Portfolio Item</a>
               </div>
-            </li>
-            <li class="nav-item dropdown">
+            </li> -->
+            <!-- <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownBlog" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Blog
               </a>
@@ -87,8 +88,8 @@
                 <a class="dropdown-item" href="faq.html">FAQ</a>
                 <a class="dropdown-item" href="404.html">404</a>
                 <a class="dropdown-item" href="pricing.html">Pricing Table</a>
-              </div>
-            </li> -->
+              </div> -->
+            </li>
           </ul>
         </div>
       </div>
@@ -103,11 +104,9 @@
         </ol>
         <div class="carousel-inner" role="listbox">
           <!-- Slide One - Set the background image for this slide in the line below -->
-          <div class="carousel-item active" style="background-image: url('http://placehold.it/1900x1080')">
-            <div class="carousel-caption d-none d-md-block">
-              <h3>First Slide</h3>
-              <p>This is a description for the first slide.</p>
-            </div>
+          <div class="carousel-item active">
+            <img src='static/socmind.png' alt='connect', style="width:100%;">
+          </div>
           </div>
           <!-- Slide Two - Set the background image for this slide in the line below -->
           <!-- <div class="carousel-item" style="background-image: url('http://placehold.it/1900x1080')">
@@ -138,13 +137,13 @@
     <!-- Page Content -->
     <div class="container">
 
-      <h1 class="my-4">Top similar users</h1>
+      <!-- <h1 class="my-4">Top similar users</h1> -->
 
       <!-- Marketing Icons Section -->
       <div class="row">
-        <div class="col-lg-12 mb-8">
+        <div class="col-lg-12 mt-4">
           <div class="card h-100">
-            <h4 class="card-header">Message</h4>
+            <h4 class="card-header">Post</h4>
             <textarea rows=10  id="message">
             </textarea>
             <div class="card-footer">
@@ -152,11 +151,20 @@
             </div>
           </div>
         </div>
+        <div class='container'>
+        <div class='row'>
+          <div class = "col-md-4 mt-4 mb-4">
+          <h1 class="my-4">Top similar users</h1>
+        </div>
+      </div>
+
+      </div>
         <div class="col-lg-4 mb-4">
           <div class="card h-100">
             <h4 class="card-header">User 1</h4>
             <div class="card-body">
-              <p class="card-text" id="u1"></p>
+              <p class="card-text" id="u1">
+              </p>
             </div>
             <div class="card-footer">
               <a href="#" class="btn btn-primary">Connect</a>
@@ -167,7 +175,8 @@
           <div class="card h-100">
             <h4 class="card-header">User 2</h4>
             <div class="card-body">
-              <p class="card-text" id='u2'></p>
+              <p class="card-text" id='u2'>
+              </p>
             </div>
             <div class="card-footer">
               <a href="#" class="btn btn-primary">Connect</a>
@@ -178,7 +187,8 @@
           <div class="card h-100">
             <h4 class="card-header">User 3</h4>
             <div class="card-body">
-              <p class="card-text" id='u3'></p>
+              <p class="card-text" id='u3'>
+              </p>
             </div>
             <div class="card-footer">
               <a href="#" class="btn btn-primary">Connect</a>
@@ -186,9 +196,10 @@
           </div>
         </div>
       </div>
+    </div>
       <!-- /.row -->
 
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-lg-4 mb-4">
           <div class="card h-100">
             <h4 class="card-header">User 4</h4>
@@ -222,12 +233,12 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
 
 
       <!-- Features Section -->
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-lg-6">
           <h2>Modern Business Features</h2>
           <p>The Modern Business template by Start Bootstrap includes:</p>
@@ -246,12 +257,12 @@
           <img class="img-fluid rounded" src="http://placehold.it/700x450" alt="">
         </div>
       </div>
-      <!-- /.row -->
+      <! /.row -->
 
-      <hr>
+      <!-- <hr>
 
-      <!-- Call to Action Section -->
-      <div class="row mb-4">
+      <! Call to Action Section -->
+      <!-- <div class="row mb-4">
         <div class="col-md-8">
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias, expedita, saepe, vero rerum deleniti beatae veniam harum neque nemo praesentium cum alias asperiores commodi.</p>
         </div>
@@ -260,11 +271,11 @@
         </div>
       </div>
 
-    </div>
+    </div> -->
     <!-- /.container -->
 
     <!-- Footer -->
-    <footer class="py-5 bg-dark">
+    <footer class="py-4 bg-dark">
       <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; Your Website 2018</p>
       </div>
