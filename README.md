@@ -1,6 +1,6 @@
 # Social Mind
 
-## A new network for mental health
+## A New Network for Mental Health
 
 ### Business Understanding
 
