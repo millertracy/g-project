@@ -32,13 +32,13 @@ def lem(string, porter):
     return " ".join([porter.stem(word)for word in string.split()])
 
 #get posts
-docs = joblib.load("../posts.pkl")
+docs = joblib.load("posts.pkl")
 
 #import vectorizer
-vectorizer = joblib.load("../vectorizer.pkl")
+vectorizer = joblib.load("vectorizer.pkl")
 
 #import fit vectorizer - it was created from user and doc structure above
-vect = joblib.load("../vect.pkl")
+vect = joblib.load("vect.pkl")
 
 
 @app.route('/')
